@@ -7,7 +7,7 @@ const EJ = {
   /* ---------------- PIERNA ---------------- */
   prensa: {
     nombre: 'Prensa de piernas', maquina: 'Máquina de prensa (sentada o inclinada)', grupo: 'Pierna', tipo: 'm',
-    musculos: 'Cuádriceps y glúteo', reps: [10, 15], inc: 5,
+    musculos: 'Cuádriceps y glúteo', reps: [10, 15], inc: 2.5,
     pasos: [
       'Siéntate con la espalda y la cadera bien pegadas al respaldo.',
       'Pon los pies ALTOS en la plataforma, al ancho de la cadera y con las puntas un poquito hacia afuera.',
@@ -19,7 +19,7 @@ const EJ = {
   },
   prensaHorizontal: {
     nombre: 'Prensa con pies juntos', maquina: 'Máquina de prensa', grupo: 'Pierna', tipo: 'm',
-    musculos: 'Cuádriceps', reps: [12, 15], inc: 5, img: 'Narrow_Stance_Leg_Press',
+    musculos: 'Cuádriceps', reps: [12, 15], inc: 2.5, img: 'Narrow_Stance_Leg_Press',
     pasos: [
       'Pies en el centro de la plataforma, más juntos que en la prensa normal.',
       'Baja lento hasta 90° de rodilla, sin despegar la cadera del asiento.',
@@ -167,7 +167,7 @@ const EJ = {
   /* ---------------- GLÚTEO ---------------- */
   hipThrust: {
     nombre: 'Hip thrust (empuje de cadera)', maquina: 'Máquina de hip thrust / glúteo, o banco + barra', grupo: 'Glúteo', tipo: 'm',
-    musculos: 'Glúteo mayor', reps: [10, 15], inc: 5, img: 'Barbell_Hip_Thrust',
+    musculos: 'Glúteo mayor', reps: [10, 15], inc: 2.5, img: 'Barbell_Hip_Thrust',
     pasos: [
       'Espalda alta apoyada en el banco; la barra (con almohadilla) o el cinturón sobre la cadera.',
       'Pies apoyados, al ancho de la cadera, y las rodillas a 90° arriba.',
@@ -179,7 +179,7 @@ const EJ = {
   },
   hipSmith: {
     nombre: 'Puente en máquina Smith', maquina: 'Máquina Smith (barra guiada)', grupo: 'Glúteo', tipo: 'm',
-    musculos: 'Glúteo mayor', reps: [10, 15], inc: 5, img: 'Smith_Machine_Hip_Raise',
+    musculos: 'Glúteo mayor', reps: [10, 15], inc: 2.5, img: 'Smith_Machine_Hip_Raise',
     pasos: [
       'Acostada en el piso o colchoneta debajo de la barra guiada, con almohadilla en la cadera.',
       'Sube la cadera apretando la cola y baja controlado.'

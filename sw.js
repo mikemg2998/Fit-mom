@@ -1,5 +1,5 @@
 /* Guarda todo en el celular para que funcione sin internet. Sube VERSION al cambiar archivos. */
-const VERSION = 'fitmommy-v1';
+const VERSION = 'fitmommy-v2';
 const ARCHIVOS = [
   './', 'index.html', 'styles.css', 'data.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
@@ -119,14 +119,16 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
+const FUENTES = ['api.fontshare.com', 'cdn.fontshare.com'];
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  const url = new URL(e.request.url);
+  const propio = url.origin === location.origin, fuente = FUENTES.includes(url.hostname);
+  if (!propio && !fuente) return;
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true }).then(r => r || fetch(e.request).then(res => {
-      if (res.ok && new URL(e.request.url).origin === location.origin) {
-        const copia = res.clone(); caches.open(VERSION).then(c => c.put(e.request, copia));
-      }
+    caches.match(e.request, { ignoreSearch: propio }).then(r => r || fetch(e.request).then(res => {
+      if (res.ok || res.type === 'opaque') { const copia = res.clone(); caches.open(VERSION).then(c => c.put(e.request, copia)); }
       return res;
-    }).catch(() => caches.match('index.html')))
+    }).catch(() => e.request.mode === 'navigate' ? caches.match('index.html') : Response.error()))
   );
 });

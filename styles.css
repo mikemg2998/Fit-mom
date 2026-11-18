@@ -1,28 +1,27 @@
 :root {
-  --bg: #0d0d0f;
-  --bg2: #17171b;
-  --card: #1e1e23;
-  --card2: #26262c;
-  --line: #2f2f37;
-  --txt: #f5f5f7;
-  --txt2: #a6a6b0;
-  --acc: #ffd60a;
-  --acc2: #ffc300;
-  --onacc: #111;
-  --ok: #3ddc84;
-  --warn: #ff9f1c;
-  --bad: #ff5a5f;
+  --bg: #141015;
+  --bg2: #1b161c;
+  --card: #241d25;
+  --card2: #2f2630;
+  --line: #3b303c;
+  --txt: #fbf4f8;
+  --txt2: #bcaab7;
+  --acc: #e8a9cc;
+  --acc2: #c98bb4;
+  --acc3: #f6d3e6;
+  --onacc: #2b1027;
+  --ok: #e8a9cc;
+  --warn: #f6d3e6;
+  --bad: #ff8fa3;
   --r: 22px;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-t: env(safe-area-inset-top, 0px);
 }
-:root[data-tema="azul"] { --acc: #4cc9f0; --acc2: #3a86ff; --onacc: #061423; }
-:root[data-tema="rosa"] { --acc: #ff7eb6; --acc2: #f72585; --onacc: #1a0410; }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; background: var(--bg); color: var(--txt); }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "General Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 17px; line-height: 1.4;
   overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
@@ -99,7 +98,7 @@ h3 { font-size: 18px; margin: 0 0 4px; }
 .item .t span b { display: inline; font-size: inherit; }
 .item .chev { color: var(--txt2); font-size: 24px; }
 .check { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-size: 16px; flex: none; }
-.check.on { background: var(--ok); border-color: var(--ok); color: #062; }
+.check.on { background: var(--ok); border-color: var(--ok); color: var(--onacc); }
 
 /* ---------- energía ---------- */
 .energia { display: grid; gap: 10px; }
@@ -141,7 +140,7 @@ h3 { font-size: 18px; margin: 0 0 4px; }
 .paso .v b { font-size: 21px; display: block; }
 .paso .v small { font-size: 11px; color: var(--txt2); text-transform: uppercase; letter-spacing: .5px; }
 .serie .hecho { height: 56px; border-radius: 16px; background: var(--card2); font-size: 26px; display: grid; place-items: center; color: var(--txt2); }
-.serie.ok .hecho { background: var(--ok); color: #053; }
+.serie.ok .hecho { background: var(--ok); color: var(--onacc); }
 .series-acc { display: flex; gap: 10px; margin-top: 4px; }
 .series-acc button { font-size: 15px; color: var(--txt2); font-weight: 700; padding: 8px 4px; }
 
@@ -164,9 +163,8 @@ h3 { font-size: 18px; margin: 0 0 4px; }
 nav.tabs { position: fixed; left: 0; right: 0; bottom: 0; background: color-mix(in srgb, var(--bg2) 92%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line); z-index: 20; padding-bottom: var(--safe-b); }
 nav.tabs .in { max-width: 520px; margin: 0 auto; display: flex; }
 nav.tabs a { flex: 1; text-align: center; padding: 10px 0 9px; color: var(--txt2); text-decoration: none; font-size: 12px; font-weight: 700; }
-nav.tabs a i { display: block; font-style: normal; font-size: 25px; line-height: 1.15; filter: grayscale(1); opacity: .65; }
+nav.tabs a svg { display: block; margin: 0 auto 3px; }
 nav.tabs a.on { color: var(--acc); }
-nav.tabs a.on i { filter: none; opacity: 1; }
 
 /* ---------- hoja inferior (modal) ---------- */
 .velo { position: fixed; inset: 0; background: #000a; z-index: 50; display: flex; align-items: flex-end; justify-content: center; animation: fade .2s; }
@@ -201,9 +199,6 @@ table.hist td:last-child { text-align: right; color: var(--txt2); }
 .campo span { display: block; font-size: 14px; color: var(--txt2); margin-bottom: 6px; font-weight: 600; }
 .campo input { width: 100%; height: 54px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); color: var(--txt); font-size: 19px; padding: 0 14px; outline: none; }
 .campo input:focus { border-color: var(--acc); }
-.temas { display: flex; gap: 12px; }
-.tema { width: 56px; height: 56px; border-radius: 50%; border: 4px solid transparent; }
-.tema.on { border-color: var(--txt); }
 
 /* ---------- texto largo ---------- */
 .texto p, .texto li { color: #dcdce2; font-size: 16px; }
@@ -222,3 +217,25 @@ table.hist td:last-child { text-align: right; color: var(--txt2); }
 .vacio { text-align: center; color: var(--txt2); padding: 30px 10px; }
 .vacio div { font-size: 48px; }
 .sep { height: 1px; background: var(--line); margin: 18px 0; }
+
+/* ---------- la vez pasada ---------- */
+.vez { background: linear-gradient(160deg, color-mix(in srgb, var(--acc) 22%, var(--card)) 0%, var(--card) 70%); border: 1.5px solid color-mix(in srgb, var(--acc) 45%, transparent); border-radius: 22px; padding: 14px; margin: 12px 0; }
+.vez-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.vez-t span { font-weight: 700; color: var(--acc); font-size: 16px; }
+.vez-t b { font-size: 14px; color: var(--txt2); font-weight: 600; }
+.vez-sets { display: flex; gap: 8px; margin: 12px 0 10px; overflow-x: auto; }
+.vs { flex: 1 0 74px; background: var(--bg2); border-radius: 14px; padding: 8px 6px; text-align: center; }
+.vs small { display: block; font-size: 11px; color: var(--txt2); text-transform: uppercase; letter-spacing: .4px; }
+.vs b { display: block; font-size: 22px; line-height: 1.2; }
+.vs b i { font-style: normal; font-size: 13px; color: var(--txt2); font-weight: 600; }
+.vs span { font-size: 14px; color: var(--txt2); }
+.vez-r { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; background: var(--bg2); border-radius: 14px; padding: 10px 12px; }
+.vez-r.up { background: var(--acc); color: var(--onacc); }
+.vez-b { display: flex; justify-content: space-between; width: 100%; margin-top: 10px; font-size: 14px; color: var(--txt2); padding: 4px 2px; }
+.vez-b span:last-child { color: var(--acc); font-weight: 700; }
+.hist-l { margin-top: 10px; }
+.hl { display: flex; justify-content: space-between; gap: 10px; align-items: center; width: 100%; text-align: left; padding: 12px 2px; border-bottom: 1px solid var(--line); }
+.hl b { display: block; font-size: 16px; }
+.hl small { color: var(--txt2); font-size: 13px; }
+.hl-s { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; max-width: 62%; }
+.hl-s span { background: var(--card2); border-radius: 9px; padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
