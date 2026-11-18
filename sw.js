@@ -1,5 +1,5 @@
 /* Guarda todo en el celular para que funcione sin internet. Sube VERSION al cambiar archivos. */
-const VERSION = 'migym-v1';
+const VERSION = 'fitmommy-v1';
 const ARCHIVOS = [
   './', 'index.html', 'styles.css', 'data.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

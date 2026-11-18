@@ -1,4 +1,4 @@
-# Mi Gym
+# Fit mommy
 
 App de rutinas de gimnasio para el celular (PWA). Funciona sin internet una vez abierta.
 

@@ -1,7 +1,7 @@
-/* Mi Gym — app de rutinas. Todo se guarda en el celular (localStorage). */
+/* Fit mommy — app de rutinas. Todo se guarda en el celular (localStorage). */
 'use strict';
 
-const CLAVE = 'miGym.v1';
+const CLAVE = 'fitMommy.v1';
 const $app = document.getElementById('app');
 const DIAS_SEM = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -517,7 +517,7 @@ function vPorque() {
 function vInstalar() {
   return `<button class="link" onclick="history.back()">‹ Volver</button><h1>Poner la app en el celular 📲</h1>
   ${deferido ? `<button class="btn" data-a="instalarYa">Instalar ahora</button>` : ''}
-  <div class="card"><h3>📱 Android (Chrome)</h3><ol class="pasos"><li>Abre el link en <b>Chrome</b>.</li><li>Toca los <b>3 puntitos ⋮</b> arriba a la derecha.</li><li>Toca <b>"Agregar a la pantalla principal"</b> o <b>"Instalar app"</b>.</li><li>Listo: aparece el ícono "Mi Gym" junto a tus apps.</li></ol></div>
+  <div class="card"><h3>📱 Android (Chrome)</h3><ol class="pasos"><li>Abre el link en <b>Chrome</b>.</li><li>Toca los <b>3 puntitos ⋮</b> arriba a la derecha.</li><li>Toca <b>"Agregar a la pantalla principal"</b> o <b>"Instalar app"</b>.</li><li>Listo: aparece el ícono "Fit mommy" junto a tus apps.</li></ol></div>
   <div class="card"><h3>🍎 iPhone (Safari)</h3><ol class="pasos"><li>Abre el link en <b>Safari</b>.</li><li>Toca el botón <b>Compartir</b> (cuadrito con flecha ↑).</li><li>Baja y toca <b>"Agregar a inicio"</b>.</li><li>Toca <b>"Agregar"</b>.</li></ol></div>
   <div class="consejo">Después de abrirla una vez con internet, funciona <b>sin internet</b> en el gimnasio.</div>`;
 }
@@ -696,10 +696,10 @@ function rerenderMismaPos() { const y = window.scrollY; render(); window.scrollT
 /* ================= COPIA DE SEGURIDAD ================= */
 async function exportar() {
   const datos = JSON.stringify(S);
-  const nombre = 'mi-gym-copia-' + hoy() + '.json';
+  const nombre = 'fit-mommy-copia-' + hoy() + '.json';
   try {
     const f = new File([datos], nombre, { type: 'application/json' });
-    if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Copia Mi Gym' }); return; }
+    if (navigator.canShare && navigator.canShare({ files: [f] })) { await navigator.share({ files: [f], title: 'Copia Fit mommy' }); return; }
   } catch (e) { if (e && e.name === 'AbortError') return; }
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([datos], { type: 'application/json' })); a.download = nombre; a.click();
   toast('Copia descargada ✓');
