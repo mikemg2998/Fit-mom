@@ -239,3 +239,5 @@ table.hist td:last-child { text-align: right; color: var(--txt2); }
 .hl small { color: var(--txt2); font-size: 13px; }
 .hl-s { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; max-width: 62%; }
 .hl-s span { background: var(--card2); border-radius: 9px; padding: 4px 8px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+
+.meta.suave { background: var(--card); color: var(--txt2); font-weight: 700; }
