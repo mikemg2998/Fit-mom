@@ -383,7 +383,7 @@ function vFin() {
   return h;
 }
 function confeti() {
-  const col = ['#E8A9CC', '#C98BB4', '#F6D3E6', '#A8668F', '#fff'];
+  const col = ['#E8A9CC', '#C98BB4', '#F6D3E6', '#9B4D7F', '#2B1027'];
   for (let i = 0; i < 60; i++) {
     const c = document.createElement('div'); c.className = 'confeti';
     c.style.left = Math.random() * 100 + 'vw'; c.style.background = col[i % col.length];
@@ -418,7 +418,7 @@ function vProgreso() {
       <div class="stat"><b>${fCorta(u.fecha)}</b><span>última medición</span></div></div>`;
     if (M.length > 1) {
       h += `<div class="card">${linea([
-        { nombre: 'Grasa (kg)', color: '#8E6A86', pts: M.filter(m => m.grasa != null).map(m => ({ x: m.fecha, y: m.grasa })) },
+        { nombre: 'Grasa (kg)', color: '#9B4D7F', pts: M.filter(m => m.grasa != null).map(m => ({ x: m.fecha, y: m.grasa })) },
         { nombre: 'Músculo (kg)', color: 'var(--acc)', pts: M.filter(m => m.musculo != null).map(m => ({ x: m.fecha, y: m.musculo })) }
       ])}</div>`;
       h += `<div class="small">Meta según la báscula: bajar unos 6 kg de grasa y subir 1 kg de músculo. Desde ${fCorta(p.fecha)}: músculo ${signo((u.musculo || 0) - (p.musculo || 0))} kg, grasa ${signo((u.grasa || 0) - (p.grasa || 0))} kg.</div>`;
@@ -472,10 +472,10 @@ function barras(datos) {
   let s = `<svg class="chart" viewBox="0 0 ${W} ${H + 24}">`;
   datos.forEach((d, i) => {
     const x = i * bw + bw * .2, w = bw * .6, hh = d.v / max * H, hm = d.meta / max * H;
-    if (d.meta) s += `<rect x="${x}" y="${H - hm}" width="${w}" height="${hm}" rx="8" fill="none" stroke="#555" stroke-dasharray="4 4"/>`;
+    if (d.meta) s += `<rect x="${x}" y="${H - hm}" width="${w}" height="${hm}" rx="8" fill="none" stroke="#c9b2c0" stroke-dasharray="4 4"/>`;
     s += `<rect x="${x}" y="${H - hh}" width="${w}" height="${Math.max(hh, 0)}" rx="8" fill="var(--acc)"/>`;
-    if (d.v) s += `<text x="${x + w / 2}" y="${H - hh - 6}" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">${d.v}</text>`;
-    s += `<text x="${x + w / 2}" y="${H + 18}" text-anchor="middle" fill="#999" font-size="11">${d.l}</text>`;
+    if (d.v) s += `<text x="${x + w / 2}" y="${H - hh - 6}" text-anchor="middle" fill="#2b1027" font-size="13" font-weight="700">${d.v}</text>`;
+    s += `<text x="${x + w / 2}" y="${H + 18}" text-anchor="middle" fill="#8a7083" font-size="11">${d.l}</text>`;
   });
   return s + `</svg><div class="small">Barra rosada = días que fuiste · línea punteada = días que planeaste</div>`;
 }
@@ -495,11 +495,11 @@ function linea(series, etiquetas) {
     s += `<polyline fill="none" stroke="${se.color}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${se.pts.map(p => X(p.x) + ',' + Y(p.y)).join(' ')}"/>`;
     se.pts.forEach((p, i) => {
       s += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="5" fill="${se.color}"/>`;
-      if (etiquetas || i === 0 || i === se.pts.length - 1) s += `<text x="${X(p.x)}" y="${Y(p.y) - 10}" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">${num(p.y)}</text>`;
+      if (etiquetas || i === 0 || i === se.pts.length - 1) s += `<text x="${X(p.x)}" y="${Y(p.y) - 10}" text-anchor="middle" fill="#2b1027" font-size="12" font-weight="700">${num(p.y)}</text>`;
     });
   });
   const paso = Math.ceil(xs.length / 5);
-  xs.forEach((x, i) => { if (i % paso === 0 || i === xs.length - 1) s += `<text x="${X(x)}" y="${H + 18}" text-anchor="middle" fill="#999" font-size="11">${fCorta(x)}</text>`; });
+  xs.forEach((x, i) => { if (i % paso === 0 || i === xs.length - 1) s += `<text x="${X(x)}" y="${H + 18}" text-anchor="middle" fill="#8a7083" font-size="11">${fCorta(x)}</text>`; });
   s += '</svg>';
   const ley = series.filter(x => x.nombre).map(x => `<span style="color:${x.color}">●</span> ${x.nombre}`).join(' &nbsp; ');
   return s + (ley ? `<div class="small">${ley}</div>` : '');
