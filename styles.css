@@ -18,8 +18,8 @@
   --safe-t: env(safe-area-inset-top, 0px);
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; background: var(--bg); color: var(--txt); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--txt); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body {
   font-family: "General Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 17px; line-height: 1.4;
@@ -137,7 +137,7 @@ h3 { font-size: 18px; margin: 0 0 4px; }
 .paso button { width: 40px; height: 100%; font-size: 26px; font-weight: 700; color: var(--acc); flex: none; }
 .paso button:active { background: #fff1; }
 .paso .v { flex: 1; text-align: center; line-height: 1.05; min-width: 0; }
-.paso .v b { font-size: 21px; display: block; }
+.paso .v b { font-size: 21px; display: block; font-variant-numeric: tabular-nums; }
 .paso .v small { font-size: 11px; color: var(--txt2); text-transform: uppercase; letter-spacing: .5px; }
 .serie .hecho { height: 56px; border-radius: 16px; background: var(--card2); font-size: 26px; display: grid; place-items: center; color: var(--txt2); }
 .serie.ok .hecho { background: var(--ok); color: var(--onacc); }

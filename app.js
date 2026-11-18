@@ -284,13 +284,7 @@ function vEjercicio(i) {
     <span class="meta">${cardio ? it.sets[0].r + ' minutos' : it.sets.length + ' series × ' + e.reps[0] + '–' + e.reps[1] + ' ' + unidad(it.ex) + (e.lado ? ' (cada lado)' : '')}</span>`;
   if (!cardio) h += vezPasadaHtml(it.ex, sg, a.energia);
 
-  it.sets.forEach((s, k) => {
-    h += `<div class="serie ${s.ok ? 'ok' : ''}"><div class="n">${cardio ? '⏱' : k + 1}</div>`;
-    if (usaPeso(it.ex)) h += paso('w', i, k, num(s.w), 'kg');
-    else h += `<div class="small center">${cardio ? 'Ritmo suave' : 'Sin peso'}</div>`;
-    h += paso('r', i, k, s.r, unidad(it.ex)) + `<button class="hecho" data-a="ok" data-i="${i}" data-k="${k}" aria-label="Serie hecha">✓</button></div>`;
-  });
-  if (!cardio) h += `<div class="series-acc"><button data-a="masSerie" data-i="${i}">+ Agregar serie</button>${it.sets.length > 1 ? `<button data-a="menosSerie" data-i="${i}">− Quitar serie</button>` : ''}</div>`;
+  h += `<div id="series">${seriesHtml(i)}</div>`;
 
   h += `<h2>¿Cómo se hace?</h2><ol class="pasos">${e.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol>`;
   if (e.rodilla && e.rodilla !== '—') h += `<div class="consejo knee">🦵 <b>Rodilla:</b> ${esc(e.rodilla)}</div>`;
@@ -300,6 +294,18 @@ function vEjercicio(i) {
   const ult = i === a.items.length - 1;
   h += `<div class="abajo"><div class="in">${i > 0 ? `<button class="btn ghost" data-a="abrir" data-i="${i - 1}" aria-label="Anterior">‹</button>` : ''}
     ${ult ? `<button class="btn" data-a="terminar">Terminar 🎉</button>` : `<button class="btn" data-a="abrir" data-i="${i + 1}">Siguiente ejercicio ›</button>`}</div></div>`;
+  return h;
+}
+function seriesHtml(i) {
+  const it = S.actual.items[i], cardio = EJ[it.ex].tipo === 'k';
+  let h = '';
+  it.sets.forEach((s, k) => {
+    h += `<div class="serie ${s.ok ? 'ok' : ''}"><div class="n">${cardio ? '⏱' : k + 1}</div>`;
+    if (usaPeso(it.ex)) h += paso('w', i, k, num(s.w), 'kg');
+    else h += `<div class="small center">${cardio ? 'Ritmo suave' : 'Sin peso'}</div>`;
+    h += paso('r', i, k, s.r, unidad(it.ex)) + `<button class="hecho" data-a="ok" data-i="${i}" data-k="${k}" aria-label="Serie hecha">✓</button></div>`;
+  });
+  if (!cardio) h += `<div class="series-acc"><button data-a="masSerie" data-i="${i}">+ Agregar serie</button>${it.sets.length > 1 ? `<button data-a="menosSerie" data-i="${i}">− Quitar serie</button>` : ''}</div>`;
   return h;
 }
 function paso(campo, i, k, v, u) {
@@ -752,7 +758,19 @@ document.addEventListener('click', ev => {
     case 'instalarYa': if (deferido) { deferido.prompt(); deferido = null; } break;
   }
 });
-function rerenderMismaPos() { const y = window.scrollY; render(); window.scrollTo(0, y); }
+// Actualiza solo las series (sin redibujar la pantalla) para que no salte ni tiemble
+function rerenderMismaPos() {
+  const box = document.getElementById('series'), m = location.hash.match(/^#\/ej\/(\d+)/);
+  if (box && m && S.actual) {
+    box.innerHTML = seriesHtml(Number(m[1]));
+    const a = S.actual, hechos = a.items.filter(itemHecho).length;
+    const bar = document.querySelector('.progreso i'), txt = document.querySelector('.progreso small');
+    if (bar) bar.style.width = Math.round(hechos / a.items.length * 100) + '%';
+    if (txt) txt.textContent = hechos + ' de ' + a.items.length + ' ejercicios';
+    return;
+  }
+  const y = window.scrollY; render(); window.scrollTo(0, y);
+}
 
 /* ================= COPIA DE SEGURIDAD ================= */
 async function exportar() {
