@@ -186,7 +186,7 @@ function navHtml(tab) {
 function vInicio() {
   const sm = semana();
   const nombre = S.nombre ? ', ' + esc(S.nombre) : '';
-  let h = `<div class="sub">${fLarga(hoy())}</div><h1>${saludo()}${nombre} </h1>`;
+  let h = `<div class="sub">${fLarga(hoy())}</div>`;
 
   if (S.actual) {
     const a = S.actual, R = RUTINAS[a.rutina];
