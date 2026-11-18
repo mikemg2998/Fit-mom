@@ -20,7 +20,7 @@ function cargar() {
   return nuevoEstado();
 }
 function guardar() {
-  try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) { toast('No se pudo guardar 😕'); }
+  try { localStorage.setItem(CLAVE, JSON.stringify(S)); } catch (e) { toast('No se pudo guardar '); }
 }
 
 /* ================= FECHAS ================= */
@@ -101,7 +101,7 @@ function sugerir(ex, energia) {
   }
   if (energia === 'tranquila') return { w, r: Math.min(minR, hi), msg: 'Día tranquilo: mismo peso que la vez pasada (' + num(w) + ' kg).', sube: false };
   if (minR >= hi && conW.length >= 2 && e.inc > 0) {
-    return { w: w + e.inc, r: lo, msg: '¡La vez pasada hiciste ' + minR + ' repeticiones con ' + num(w) + ' kg! Hoy subimos a ' + num(w + e.inc) + ' kg 💪', sube: true };
+    return { w: w + e.inc, r: lo, msg: '¡La vez pasada hiciste ' + minR + ' repeticiones con ' + num(w) + ' kg! Hoy subimos a ' + num(w + e.inc) + ' kg ', sube: true };
   }
   const r = Math.min(hi, minR + 1);
   return { w, r, msg: 'La vez pasada: ' + num(w) + ' kg × ' + minR + '. Hoy intenta ' + r + ' repeticiones.', sube: false };
@@ -186,12 +186,12 @@ function navHtml(tab) {
 function vInicio() {
   const sm = semana();
   const nombre = S.nombre ? ', ' + esc(S.nombre) : '';
-  let h = `<div class="sub">${fLarga(hoy())}</div><h1>${saludo()}${nombre} 👋</h1>`;
+  let h = `<div class="sub">${fLarga(hoy())}</div><h1>${saludo()}${nombre} </h1>`;
 
   if (S.actual) {
     const a = S.actual, R = RUTINAS[a.rutina];
     const hechos = a.items.filter(itemHecho).length;
-    h += `<div class="hero"><div class="emoji-big">${R.emoji}</div><div class="tag">Entrenamiento en curso</div>
+    h += `<div class="hero"><div class="tag">Entrenamiento en curso</div>
       <h1>${R.nombre}</h1><p>Llevas ${hechos} de ${a.items.length} ejercicios</p>
       <button class="btn dark" data-a="continuar">Continuar ▶</button></div>`;
     return h + bloqueSemana(sm);
@@ -212,18 +212,18 @@ function vInicio() {
   if (sg) {
     const R = RUTINAS[sg.rutina];
     let nota = '';
-    if (sm.hoyHecho) nota = '¡Ya entrenaste hoy! Descansa 😊 Esto es para la próxima vez.';
-    else if (sg.apretado) nota = `Quedan ${sg.quedan} día${sg.quedan === 1 ? '' : 's'} en la semana: priorizamos pierna y cola 🍑`;
+    if (sm.hoyHecho) nota = '¡Ya entrenaste hoy! Descansa. Esto es para la próxima vez.';
+    else if (sg.apretado) nota = `Quedan ${sg.quedan} día${sg.quedan === 1 ? '' : 's'} en la semana: priorizamos pierna y cola `;
     else if (sg.ayerPierna) nota = 'Ayer hiciste pierna, así que hoy descansa la pierna.';
-    h += `<div class="hero"><div class="emoji-big">${R.emoji}</div><div class="tag">${sm.hoyHecho ? 'Próximo entrenamiento' : 'Hoy te toca'}</div>
+    h += `<div class="hero"><div class="tag">${sm.hoyHecho ? 'Próximo entrenamiento' : 'Hoy te toca'}</div>
       <h1>${R.nombre}</h1><p>${R.desc}</p>
       <button class="btn dark" data-a="empezar" data-r="${sg.rutina}">Empezar ▶</button></div>`;
     if (nota) h += `<div class="consejo">${nota}</div>`;
     const otras = [...new Set(sm.pendientes.filter(x => x !== sg.rutina))];
     if (otras.length) h += `<button class="link" data-a="otras">Prefiero hacer otro entrenamiento hoy →</button>`;
   } else {
-    h += `<div class="hero"><div class="emoji-big">🏆</div><div class="tag">Semana completa</div>
-      <h1>¡Lo lograste! 🎉</h1><p>Hiciste los ${sm.n} días de esta semana. Descansa y disfruta.</p>
+    h += `<div class="hero"><div class="tag">Semana completa</div>
+      <h1>¡Lo lograste! </h1><p>Hiciste los ${sm.n} días de esta semana. Descansa y disfruta.</p>
       <button class="btn dark" data-a="extra">Quiero ir un día extra</button></div>`;
   }
   h += bloqueSemana(sm);
@@ -240,7 +240,7 @@ function bloqueSemana(sm) {
   let h = `<h2>Tu semana</h2><div class="card flat" style="padding:14px">
     <div class="row" style="align-items:center"><div><b>${sm.hechas.length} de ${sm.n || sm.hechas.length}</b> <span class="sub">entrenamientos</span></div>
     ${sm.n ? `<button class="link" style="flex:0" data-a="cambiarDias">Cambiar</button>` : ''}</div>
-    <div class="semana">${celdas.map(c => `<div class="d"><div class="bola ${c.ok ? 'ok' : ''} ${c.next ? 'next' : ''}">${c.ok ? '✓' : RUTINAS[c.r].emoji}</div><small>${c.ok ? fCorta(c.f) : RUTINAS[c.r].corto}</small></div>`).join('')}</div></div>`;
+    <div class="semana">${celdas.map(c => `<div class="d"><div class="bola ${c.ok ? 'ok' : ''} ${c.next ? 'next' : ''}"><span>${RUTINAS[c.r].corto}</span>${c.ok ? '<i>✓</i>' : ''}</div><small>${c.ok ? fCorta(c.f) : ''}</small></div>`).join('')}</div></div>`;
   return h;
 }
 
@@ -250,9 +250,9 @@ function vEntreno() {
   const R = RUTINAS[a.rutina], E = ENERGIA[a.energia];
   const hechos = a.items.filter(itemHecho).length;
   let h = topbar(hechos, a.items.length, 'salir');
-  h += `<h1>${R.emoji} ${R.nombre}</h1><div class="sub">${E.emoji} ${E.nombre} · ${E.frase}</div>
+  h += `<h1>${R.nombre}</h1><div class="sub">${E.nombre} · ${E.frase}</div>
     <div class="consejo">${E.guia}</div>
-    <button class="item" data-a="calentar"><div class="em">🔥</div><div class="t"><b>Calentamiento · 5 min</b><span>Bici suave + mover cadera, rodillas y hombros</span></div><div class="check ${a.calentado ? 'on' : ''}">${a.calentado ? '✓' : ''}</div></button>`;
+    <button class="item" data-a="calentar"><div class="t"><b>Calentamiento · 5 min</b><span>Bici suave + mover cadera, rodillas y hombros</span></div><div class="check ${a.calentado ? 'on' : ''}">${a.calentado ? '✓' : ''}</div></button>`;
   a.items.forEach((it, i) => {
     const e = EJ[it.ex], ok = it.sets.filter(s => s.ok).length;
     const desc = e.tipo === 'k' ? 'Al final · ' + it.sets[0].r + ' min (opcional)' : it.sets.length + ' series × ' + e.reps[0] + '–' + e.reps[1] + ' ' + unidad(it.ex) + (e.lado ? ' c/lado' : '') + resumenPasado(it.ex);
@@ -263,7 +263,7 @@ function vEntreno() {
   const sig = a.items.findIndex(it => !itemCompleto(it));
   h += `<div class="abajo"><div class="in">${sig >= 0
     ? `<button class="btn" data-a="abrir" data-i="${sig}">${hechos ? 'Seguir con el ' + (sig + 1) : 'Empezar con el 1'} ▶</button>`
-    : `<button class="btn" data-a="terminar">Terminar entrenamiento 🎉</button>`}</div></div>`;
+    : `<button class="btn" data-a="terminar">Terminar entrenamiento </button>`}</div></div>`;
   return h;
 }
 function topbar(hechos, total, accion) {
@@ -280,27 +280,27 @@ function vEjercicio(i) {
   const hechos = a.items.filter(itemHecho).length;
   let h = topbar(hechos, a.items.length, 'lista');
   h += fotoHtml(it.ex, (i + 1) + ' de ' + a.items.length);
-  h += `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">🏋️ ${esc(e.maquina)}</div><br>
-    <span class="meta">${cardio ? it.sets[0].r + ' minutos' : it.sets.length + ' series × ' + e.reps[0] + '–' + e.reps[1] + ' ' + unidad(it.ex) + (e.lado ? ' (cada lado)' : '')}</span>${cardio ? '' : ` <span class="meta suave">⏱ Descanso ${mmss(segDescanso(it.ex, a.energia))} min</span>`}`;
+  h += `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">${esc(e.maquina)}</div><br>
+    <span class="meta">${cardio ? it.sets[0].r + ' minutos' : it.sets.length + ' series × ' + e.reps[0] + '–' + e.reps[1] + ' ' + unidad(it.ex) + (e.lado ? ' (cada lado)' : '')}</span>${cardio ? '' : ` <span class="meta suave"> Descanso ${mmss(segDescanso(it.ex, a.energia))} min</span>`}`;
   if (!cardio) h += vezPasadaHtml(it.ex, sg, a.energia);
 
   h += `<div id="series">${seriesHtml(i)}</div>`;
 
   h += `<h2>¿Cómo se hace?</h2><ol class="pasos">${e.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol>`;
-  if (e.rodilla && e.rodilla !== '—') h += `<div class="consejo knee">🦵 <b>Rodilla:</b> ${esc(e.rodilla)}</div>`;
+  if (e.rodilla && e.rodilla !== '—') h += `<div class="consejo knee"> <b>Rodilla:</b> ${esc(e.rodilla)}</div>`;
   h += `<h2>¿Máquina ocupada? Cámbialo por:</h2><div class="variantes">${e.variantes.map(v => `
     <button class="variante" data-a="cambiar" data-i="${i}" data-ex="${v}"><img src="${foto(v, 1)}" alt="" loading="lazy"><div><b>${esc(EJ[v].nombre)}</b><span>${esc(EJ[v].maquina)}</span></div></button>`).join('')}</div>`;
 
   const ult = i === a.items.length - 1;
   h += `<div class="abajo"><div class="in">${i > 0 ? `<button class="btn ghost" data-a="abrir" data-i="${i - 1}" aria-label="Anterior">‹</button>` : ''}
-    ${ult ? `<button class="btn" data-a="terminar">Terminar 🎉</button>` : `<button class="btn" data-a="abrir" data-i="${i + 1}">Siguiente ejercicio ›</button>`}</div></div>`;
+    ${ult ? `<button class="btn" data-a="terminar">Terminar </button>` : `<button class="btn" data-a="abrir" data-i="${i + 1}">Siguiente ejercicio ›</button>`}</div></div>`;
   return h;
 }
 function seriesHtml(i) {
   const it = S.actual.items[i], cardio = EJ[it.ex].tipo === 'k';
   let h = '';
   it.sets.forEach((s, k) => {
-    h += `<div class="serie ${s.ok ? 'ok' : ''}"><div class="n">${cardio ? '⏱' : k + 1}</div>`;
+    h += `<div class="serie ${s.ok ? 'ok' : ''}"><div class="n">${cardio ? '1' : k + 1}</div>`;
     if (usaPeso(it.ex)) h += paso('w', i, k, num(s.w), 'kg');
     else h += `<div class="small center">${cardio ? 'Ritmo suave' : 'Sin peso'}</div>`;
     h += paso('r', i, k, s.r, unidad(it.ex)) + `<button class="hecho" data-a="ok" data-i="${i}" data-k="${k}" aria-label="Serie hecha">✓</button></div>`;
@@ -327,21 +327,21 @@ function resumenPasado(ex) {
   const u = ultimo(ex); if (!u) return '';
   if (EJ[ex].tipo === 'k') return '';
   const w = Math.max(...u.sets.map(s => s.w || 0)), r = Math.max(...u.sets.map(s => s.r));
-  return '<br>📒 Vez pasada: ' + (usaPeso(ex) ? num(w) + ' kg × ' : '') + r;
+  return '<br>Vez pasada: ' + (usaPeso(ex) ? num(w) + ' kg × ' : '') + r;
 }
 function haceTxt(f) { const d = difDias(f, hoy()); return d === 0 ? 'hoy' : d === 1 ? 'ayer' : 'hace ' + d + ' días'; }
 function vezPasadaHtml(ex, sg, energia) {
   const u = ultimo(ex);
   if (!u) return sg && sg.msg ? `<div class="consejo">${sg.msg}</div>` : '';
   const peso = usaPeso(ex), n = vecesHecho(ex), rec = mejor(ex), U = unidad(ex);
-  let h = `<div class="vez"><div class="vez-t"><span>📒 La vez pasada</span><b>${fCorta(u.fecha)} · ${haceTxt(u.fecha)}</b></div>
+  let h = `<div class="vez"><div class="vez-t"><span>La vez pasada</span><b>${fCorta(u.fecha)} · ${haceTxt(u.fecha)}</b></div>
     <div class="vez-sets">${u.sets.map((s, k) => `<div class="vs"><small>Serie ${k + 1}</small>${peso ? `<b>${num(s.w)}<i> kg</i></b><span>${s.r} ${U}</span>` : `<b>${s.r}</b><span>${U}</span>`}</div>`).join('')}</div>`;
   if (sg && peso) {
-    if (sg.sube) h += `<div class="vez-r up">⬆️ <div><b>¡Sí, súbele!</b> Hoy ${num(sg.w)} kg. La vez pasada lograste todas las repeticiones.</div></div>`;
-    else if (energia === 'tranquila') h += `<div class="vez-r">🌿 <div><b>Mismo peso: ${num(sg.w)} kg.</b> Hoy es día tranquilo.</div></div>`;
-    else h += `<div class="vez-r">➡️ <div><b>Quédate en ${num(sg.w)} kg</b> e intenta llegar a ${sg.r} repeticiones. Cuando hagas ${EJ[ex].reps[1]} en todas las series, te digo que subas.</div></div>`;
-  } else if (sg && !peso) h += `<div class="vez-r">➡️ <div>Intenta llegar a <b>${sg.r} ${U}</b> hoy.</div></div>`;
-  h += `<button class="vez-b" data-a="historial" data-ex="${ex}"><span>${peso && rec ? '🏅 Récord: <b>' + num(rec) + ' kg</b>' : '📅 ' + n + (n === 1 ? ' vez' : ' veces')}</span><span>Ver todas las veces (${n}) ›</span></button></div>`;
+    if (sg.sube) h += `<div class="vez-r up"><div><b>¡Sí, súbele!</b> Hoy ${num(sg.w)} kg. La vez pasada lograste todas las repeticiones.</div></div>`;
+    else if (energia === 'tranquila') h += `<div class="vez-r"><div><b>Mismo peso: ${num(sg.w)} kg.</b> Hoy es día tranquilo.</div></div>`;
+    else h += `<div class="vez-r"><div><b>Quédate en ${num(sg.w)} kg</b> e intenta llegar a ${sg.r} repeticiones. Cuando hagas ${EJ[ex].reps[1]} en todas las series, te digo que subas.</div></div>`;
+  } else if (sg && !peso) h += `<div class="vez-r"><div>Intenta llegar a <b>${sg.r} ${U}</b> hoy.</div></div>`;
+  h += `<button class="vez-b" data-a="historial" data-ex="${ex}"><span>${peso && rec ? ' Récord: <b>' + num(rec) + ' kg</b>' : ' ' + n + (n === 1 ? ' vez' : ' veces')}</span><span>Ver todas las veces (${n}) ›</span></button></div>`;
   return h;
 }
 function hojaHistorial(ex) {
@@ -349,7 +349,7 @@ function hojaHistorial(ex) {
   const pts = filas.map(r => ({ x: r.f, y: peso ? Math.max(...r.sets.map(s => s.w || 0)) : Math.max(...r.sets.map(s => s.r)) }));
   const unico = {}; pts.forEach(p => { unico[p.x] = Math.max(unico[p.x] || 0, p.y); });
   const pts2 = Object.keys(unico).sort().map(x => ({ x, y: unico[x] }));
-  hoja(`<h2>📒 ${esc(EJ[ex].nombre)}</h2><div class="sub">Todas las veces que lo hiciste</div>
+  hoja(`<h2>${esc(EJ[ex].nombre)}</h2><div class="sub">Todas las veces que lo hiciste</div>
     ${pts2.length > 1 ? `<div class="card" style="padding:12px">${linea([{ nombre: peso ? 'Peso más alto (kg)' : 'Mejor marca', color: 'var(--acc)', pts: pts2 }], true)}</div>` : ''}
     <div class="hist-l">${filas.slice().reverse().map(r => `<div class="hl"><div><b>${fCorta(r.f)}</b><small>${haceTxt(r.f)}</small></div><div class="hl-s">${r.sets.map((s, k) => `<span>${peso ? num(s.w) + ' kg × ' : ''}${s.r}</span>`).join('')}</div></div>`).join('')}</div>
     <button class="btn ghost sm" data-a="cerrar" style="margin-top:14px">Cerrar</button>`);
@@ -357,7 +357,7 @@ function hojaHistorial(ex) {
 function hojaSesion(id) {
   const h0 = S.historial.find(x => x.id === id); if (!h0) return;
   const R = RUTINAS[h0.rutina];
-  hoja(`<h2>${R.emoji} ${R.nombre}</h2><div class="sub">${fLarga(h0.fecha)} · ${ENERGIA[h0.energia].emoji} ${ENERGIA[h0.energia].nombre}</div>
+  hoja(`<h2>${R.nombre}</h2><div class="sub">${fLarga(h0.fecha)} · ${ENERGIA[h0.energia].nombre}</div>
     <div class="hist-l">${h0.items.map(it => `<button class="hl" data-a="historial" data-ex="${it.ex}"><div><b>${esc(EJ[it.ex].nombre)}</b></div><div class="hl-s">${it.sets.map(s => `<span>${usaPeso(it.ex) ? num(s.w) + ' kg × ' : ''}${s.r}${EJ[it.ex].tipo === 'k' ? ' min' : ''}</span>`).join('')}</div></button>`).join('')}</div>
     <button class="btn ghost sm" data-a="cerrar" style="margin-top:14px">Cerrar</button>`);
 }
@@ -369,7 +369,7 @@ function vFin() {
   const series = h0.items.reduce((a, it) => a + it.sets.length, 0);
   const kilos = h0.items.reduce((a, it) => a + it.sets.reduce((b, s) => b + (s.w || 0) * (EJ[it.ex].tipo === 'k' ? 0 : s.r), 0), 0);
   const sm = semana();
-  let h = `<div class="fiesta"><div class="big">🎉</div><h1>¡Excelente${S.nombre ? ', ' + esc(S.nombre) : ''}!</h1>
+  let h = `<div class="fiesta"><div class="big"><span>✓</span></div><h1>¡Excelente${S.nombre ? ', ' + esc(S.nombre) : ''}!</h1>
     <div class="sub">${RUTINAS[h0.rutina].nombre} terminado</div></div>
     <div class="stat-grid" style="margin-top:20px">
       <div class="stat"><b>${h0.items.length}</b><span>ejercicios</span></div>
@@ -377,8 +377,8 @@ function vFin() {
       <div class="stat"><b>${Math.round(kilos).toLocaleString('es-CO')}</b><span>kg levantados en total</span></div>
       <div class="stat"><b>${sm.hechas.length}${sm.n ? '/' + sm.n : ''}</b><span>días esta semana</span></div>
     </div>`;
-  if (f.prs.length) h += `<h2>🏅 ¡Nuevos récords!</h2>` + f.prs.map(p => `<div class="item"><img class="thumb" src="${foto(p.ex, 1)}" alt=""><div class="t"><b>${esc(EJ[p.ex].nombre)}</b><span>${num(p.ant)} kg → <b class="acc">${num(p.w)} kg</b></span></div></div>`).join('');
-  h += `<div class="consejo" style="margin-top:20px">💧 Toma agua y come algo con proteína en las próximas 2 horas (huevos, pollo, yogur, queso, fríjoles).</div>
+  if (f.prs.length) h += `<h2>¡Nuevos récords!</h2>` + f.prs.map(p => `<div class="item"><img class="thumb" src="${foto(p.ex, 1)}" alt=""><div class="t"><b>${esc(EJ[p.ex].nombre)}</b><span>${num(p.ant)} kg → <b class="acc">${num(p.w)} kg</b></span></div></div>`).join('');
+  h += `<div class="consejo" style="margin-top:20px">Toma agua y come algo con proteína en las próximas 2 horas (huevos, pollo, yogur, queso, fríjoles).</div>
     <div class="abajo"><div class="in"><button class="btn" data-a="inicio">Volver al inicio</button></div></div>`;
   return h;
 }
@@ -396,7 +396,7 @@ function confeti() {
 /* ================= VISTA: PROGRESO ================= */
 function vProgreso() {
   const H = S.historial;
-  let h = `<h1>Tu progreso 📈</h1>`;
+  let h = `<h1>Tu progreso </h1>`;
   // Días por semana (últimas 8)
   const semanas = [];
   for (let k = 7; k >= 0; k--) { const d = aFecha(lunes(hoy())); d.setDate(d.getDate() - 7 * k); semanas.push(iso(d)); }
@@ -431,10 +431,10 @@ function vProgreso() {
   H.forEach(x => x.items.forEach(it => { usados[it.ex] = (usados[it.ex] || 0) + 1; }));
   const lista = Object.keys(usados).filter(ex => EJ[ex] && EJ[ex].tipo !== 'k').sort((a, b) => usados[b] - usados[a]);
   if (H.length) {
-    h += `<h2>Tus entrenamientos</h2>` + H.slice().reverse().slice(0, 30).map(x => `<button class="item" data-a="sesion" data-id="${x.id}"><div class="em">${RUTINAS[x.rutina].emoji}</div><div class="t"><b>${RUTINAS[x.rutina].nombre}</b><span>${fLarga(x.fecha)} · ${x.items.length} ejercicios</span></div><div class="chev">›</div></button>`).join('');
+    h += `<h2>Tus entrenamientos</h2>` + H.slice().reverse().slice(0, 30).map(x => `<button class="item" data-a="sesion" data-id="${x.id}"><div class="em txt">${RUTINAS[x.rutina].corto}</div><div class="t"><b>${RUTINAS[x.rutina].nombre}</b><span>${fLarga(x.fecha)} · ${x.items.length} ejercicios</span></div><div class="chev">›</div></button>`).join('');
   }
   h += `<h2>Pesos por ejercicio</h2><div class="sub">Toca uno para ver todas las veces que lo hiciste.</div>`;
-  if (!lista.length) h += `<div class="vacio"><div>🏋️‍♀️</div>Cuando termines tu primer entrenamiento, aquí verás cómo suben tus pesos semana a semana.</div>`;
+  if (!lista.length) h += `<div class="vacio">Cuando termines tu primer entrenamiento, aquí verás cómo suben tus pesos semana a semana.</div>`;
   lista.forEach(ex => {
     const u2 = ultimo(ex), w = u2 ? Math.max(...u2.sets.map(s => s.w || 0)) : 0;
     const prim = primero(ex), dif = w - prim;
@@ -458,7 +458,7 @@ function vProgEj(ex) {
   filas.forEach(r => { const w = lunes(r.f); const m = usaPeso(ex) ? Math.max(...r.sets.map(s => s.w || 0)) : Math.max(...r.sets.map(s => s.r)); porSem[w] = Math.max(porSem[w] || 0, m); });
   const pts = Object.keys(porSem).sort().map(w => ({ x: w, y: porSem[w] }));
   let h = `<button class="link" onclick="history.back()">‹ Volver</button>` + fotoHtml(ex) +
-    `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">🏋️ ${esc(e.maquina)}</div>`;
+    `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">${esc(e.maquina)}</div>`;
   h += `<h2>${usaPeso(ex) ? 'Peso más alto por semana (kg)' : 'Mejor marca por semana (' + unidad(ex) + ')'}</h2>`;
   h += pts.length > 1 ? `<div class="card">${linea([{ nombre: '', color: 'var(--acc)', pts }], true)}</div>` : `<div class="small">Necesitas al menos 2 semanas para ver la gráfica.</div>`;
   h += `<h2>Historial</h2><table class="hist">${filas.slice().reverse().map(r => `<tr><td><b>${fCorta(r.f)}</b></td><td>${r.sets.map(s => (usaPeso(ex) ? num(s.w) + '×' : '') + s.r).join(' · ')}</td></tr>`).join('')}</table>`;
@@ -509,7 +509,7 @@ function linea(series, etiquetas) {
 function vGuia(grupo) {
   const grupos = ['Pierna', 'Glúteo', 'Espalda', 'Pecho', 'Hombro', 'Brazos', 'Abdomen', 'Cardio'];
   const g = grupos.includes(decodeURIComponent(grupo || '')) ? decodeURIComponent(grupo) : 'Pierna';
-  let h = `<h1>Ejercicios 📖</h1><div class="sub">Toca uno para ver cómo se hace.</div>
+  let h = `<h1>Ejercicios </h1><div class="sub">Toca uno para ver cómo se hace.</div>
     <div class="chips">${grupos.map(x => `<a class="chip ${x === g ? 'on' : ''}" href="#/guia/${encodeURIComponent(x)}" style="text-decoration:none">${x}</a>`).join('')}</div>`;
   Object.keys(EJ).filter(k => EJ[k].grupo === g).forEach(k => {
     h += `<button class="item" onclick="go('#/ficha/${k}')"><img class="thumb" src="${foto(k, 1)}" alt="" loading="lazy"><div class="t"><b>${esc(EJ[k].nombre)}</b><span>${esc(EJ[k].maquina)}</span></div><div class="chev">›</div></button>`;
@@ -520,19 +520,19 @@ function vFicha(ex) {
   const e = EJ[ex]; if (!e) return '';
   const tieneHist = vecesHecho(ex) > 0;
   let h = `<button class="link" onclick="history.back()">‹ Volver</button>` + fotoHtml(ex) +
-    `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">🏋️ ${esc(e.maquina)}</div><br>
+    `<div class="ej-nombre">${esc(e.nombre)}</div><div class="maq">${esc(e.maquina)}</div><br>
     <span class="meta">${e.reps[0]}–${e.reps[1]} ${unidad(ex)}${e.lado ? ' c/lado' : ''}</span><div class="sub">Trabaja: ${esc(e.musculos)}</div>${tieneHist ? vezPasadaHtml(ex, null, null) : ''}
     <h2>¿Cómo se hace?</h2><ol class="pasos">${e.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol>`;
-  if (e.rodilla && e.rodilla !== '—') h += `<div class="consejo knee">🦵 <b>Rodilla:</b> ${esc(e.rodilla)}</div>`;
+  if (e.rodilla && e.rodilla !== '—') h += `<div class="consejo knee"> <b>Rodilla:</b> ${esc(e.rodilla)}</div>`;
   h += `<h2>Parecidos</h2><div class="variantes">${e.variantes.map(v => `<button class="variante" onclick="go('#/ficha/${v}')"><img src="${foto(v, 1)}" alt="" loading="lazy"><div><b>${esc(EJ[v].nombre)}</b><span>${esc(EJ[v].maquina)}</span></div></button>`).join('')}</div>`;
   return h;
 }
 
 /* ================= VISTA: MÁS ================= */
 function vMas() {
-  return `<h1>Más ⚙️</h1>
-    <button class="item" onclick="go('#/porque')"><div class="em">🔬</div><div class="t"><b>¿Por qué esta rutina?</b><span>Lo que dice la ciencia y tu rodilla</span></div><div class="chev">›</div></button>
-    <button class="item" onclick="go('#/instalar')"><div class="em">📲</div><div class="t"><b>Poner la app en el celular</b><span>Para abrirla sin internet</span></div><div class="chev">›</div></button>
+  return `<h1>Más </h1>
+    <button class="item" onclick="go('#/porque')"><div class="t"><b>¿Por qué esta rutina?</b><span>Lo que dice la ciencia y tu rodilla</span></div><div class="chev">›</div></button>
+    <button class="item" onclick="go('#/instalar')"><div class="t"><b>Poner la app en el celular</b><span>Para abrirla sin internet</span></div><div class="chev">›</div></button>
     <h2>Tu nombre</h2><label class="campo"><input id="nombre" value="${esc(S.nombre)}" placeholder="¿Cómo te llamas?" maxlength="20" onchange="S.nombre=this.value.trim();guardar();toast('Guardado ✓')"></label>
     <h2>Copia de seguridad</h2>
     <div class="small">Tus datos viven solo en este celular. Guarda una copia de vez en cuando (por ejemplo, mándatela por WhatsApp).</div>
@@ -540,13 +540,13 @@ function vMas() {
     <input type="file" id="archivo" accept=".json,application/json" hidden>
     <div class="sep"></div>
     <button class="btn danger sm" data-a="borrar">Borrar todo y empezar de cero</button>
-    <p class="small center" style="margin-top:24px">Fotos de ejercicios: Free Exercise DB (dominio público).<br>Hecha con cariño 💛</p>`;
+    <p class="small center" style="margin-top:24px">Fotos de ejercicios: Free Exercise DB (dominio público).<br>Hecha con cariño </p>`;
 }
 function vPorque() {
-  return `<button class="link" onclick="history.back()">‹ Volver</button><h1>¿Por qué esta rutina? 🔬</h1><div class="texto">
+  return `<button class="link" onclick="history.back()">‹ Volver</button><h1>¿Por qué esta rutina? </h1><div class="texto">
   <div class="card"><h3>Tu punto de partida</h3>
   <p>52 años · 164 cm · 66 kg · grasa 22 kg (cerca del 33 %) · músculo esquelético 21 kg.</p>
-  <p>Desde junio ganaste 1 kg de músculo 👏 y subió 2 kg la grasa. La báscula sugiere <b>bajar unos 6 kg de grasa y subir 1 kg de músculo</b>. A un ritmo sano (medio kilo por semana como máximo) eso toma de 3 a 6 meses de constancia.</p></div>
+  <p>Desde junio ganaste 1 kg de músculo  y subió 2 kg la grasa. La báscula sugiere <b>bajar unos 6 kg de grasa y subir 1 kg de músculo</b>. A un ritmo sano (medio kilo por semana como máximo) eso toma de 3 a 6 meses de constancia.</p></div>
 
   <h2>Lo que dice la ciencia</h2>
   <ul>
@@ -560,7 +560,7 @@ function vPorque() {
   <li><b>Los días con poca energía cuentan.</b> Mejor ir y hacer la versión tranquila que no ir. Lo que da resultados es la constancia de semanas y meses. Dormir 7 a 8 horas también ayuda a ganar músculo.</li>
   </ul>
 
-  <h2>🦵 Cuidando la rodilla operada</h2>
+  <h2>Cuidando la rodilla operada</h2>
   <ul>
   <li>Nada de impacto: correr, saltar, aeróbicos con brincos.</li>
   <li>No doblar la rodilla con peso más allá de 90° (ángulo recto). Por eso no hay sentadillas profundas ni zancadas, y la prensa se hace con poco peso y recorrido corto.</li>
@@ -581,10 +581,10 @@ function vPorque() {
   </div>`;
 }
 function vInstalar() {
-  return `<button class="link" onclick="history.back()">‹ Volver</button><h1>Poner la app en el celular 📲</h1>
+  return `<button class="link" onclick="history.back()">‹ Volver</button><h1>Poner la app en el celular </h1>
   ${deferido ? `<button class="btn" data-a="instalarYa">Instalar ahora</button>` : ''}
-  <div class="card"><h3>📱 Android (Chrome)</h3><ol class="pasos"><li>Abre el link en <b>Chrome</b>.</li><li>Toca los <b>3 puntitos ⋮</b> arriba a la derecha.</li><li>Toca <b>"Agregar a la pantalla principal"</b> o <b>"Instalar app"</b>.</li><li>Listo: aparece el ícono "Fit mommy" junto a tus apps.</li></ol></div>
-  <div class="card"><h3>🍎 iPhone (Safari)</h3><ol class="pasos"><li>Abre el link en <b>Safari</b>.</li><li>Toca el botón <b>Compartir</b> (cuadrito con flecha ↑).</li><li>Baja y toca <b>"Agregar a inicio"</b>.</li><li>Toca <b>"Agregar"</b>.</li></ol></div>
+  <div class="card"><h3>Android (Chrome)</h3><ol class="pasos"><li>Abre el link en <b>Chrome</b>.</li><li>Toca los <b>3 puntitos ⋮</b> arriba a la derecha.</li><li>Toca <b>"Agregar a la pantalla principal"</b> o <b>"Instalar app"</b>.</li><li>Listo: aparece el ícono "Fit mommy" junto a tus apps.</li></ol></div>
+  <div class="card"><h3>iPhone (Safari)</h3><ol class="pasos"><li>Abre el link en <b>Safari</b>.</li><li>Toca el botón <b>Compartir</b> (cuadrito con flecha ↑).</li><li>Baja y toca <b>"Agregar a inicio"</b>.</li><li>Toca <b>"Agregar"</b>.</li></ol></div>
   <div class="consejo">Después de abrirla una vez con internet, funciona <b>sin internet</b> en el gimnasio.</div>`;
 }
 
@@ -598,19 +598,20 @@ function hoja(html) {
 }
 function cerrarHoja() { const v = document.getElementById('velo'); if (v) v.remove(); }
 
+function barras3(n) { return `<span class="niv">${[1, 2, 3].map(k => `<i class="${k <= n ? 'on' : ''}"></i>`).join('')}</span>`; }
 function hojaEnergia(rutina) {
   const R = RUTINAS[rutina];
-  hoja(`<h2>${R.emoji} ${R.nombre}</h2><div class="sub" style="margin-bottom:14px">¿Cómo te sientes hoy?</div><div class="energia">
-    ${Object.keys(ENERGIA).map(k => { const E = ENERGIA[k]; return `<button class="en-btn" data-a="energia" data-r="${rutina}" data-e="${k}"><div class="e">${E.emoji}</div><div><b>${E.nombre}</b><span>${E.frase}</span></div></button>`; }).join('')}
+  hoja(`<h2>${R.nombre}</h2><div class="sub" style="margin-bottom:14px">¿Cómo te sientes hoy?</div><div class="energia">
+    ${Object.keys(ENERGIA).map(k => { const E = ENERGIA[k]; return `<button class="en-btn" data-a="energia" data-r="${rutina}" data-e="${k}"><div class="e">${barras3(E.nivel)}</div><div><b>${E.nombre}</b><span>${E.frase}</span></div></button>`; }).join('')}
     </div><p class="small center">Todos los días cuentan. Si estás cansada, la tranquila también te hace avanzar.</p>`);
 }
 function hojaOtras() {
   const sm = semana();
   const ops = [...new Set(sm.pendientes)];
-  hoja(`<h2>¿Qué quieres hacer hoy?</h2>${ops.map(r => `<button class="item" data-a="empezar" data-r="${r}"><div class="em">${RUTINAS[r].emoji}</div><div class="t"><b>${RUTINAS[r].nombre}</b><span>${RUTINAS[r].desc}</span></div><div class="chev">›</div></button>`).join('')}`);
+  hoja(`<h2>¿Qué quieres hacer hoy?</h2>${ops.map(r => `<button class="item" data-a="empezar" data-r="${r}"><div class="em txt">${RUTINAS[r].corto}</div><div class="t"><b>${RUTINAS[r].nombre}</b><span>${RUTINAS[r].desc}</span></div><div class="chev">›</div></button>`).join('')}`);
 }
 function hojaExtra() {
-  hoja(`<h2>Día extra 🔥</h2><div class="sub">Elige cualquiera:</div>${Object.keys(RUTINAS).map(r => `<button class="item" data-a="empezar" data-r="${r}"><div class="em">${RUTINAS[r].emoji}</div><div class="t"><b>${RUTINAS[r].nombre}</b><span>${RUTINAS[r].desc}</span></div><div class="chev">›</div></button>`).join('')}`);
+  hoja(`<h2>Día extra </h2><div class="sub">Elige cualquiera:</div>${Object.keys(RUTINAS).map(r => `<button class="item" data-a="empezar" data-r="${r}"><div class="em txt">${RUTINAS[r].corto}</div><div class="t"><b>${RUTINAS[r].nombre}</b><span>${RUTINAS[r].desc}</span></div><div class="chev">›</div></button>`).join('')}`);
 }
 function hojaDias() {
   const sm = semana();
@@ -653,7 +654,7 @@ function descanso(seg) {
   const fin = Date.now() + seg * 1000;
   const d = document.createElement('div'); d.className = 'descanso'; d.id = 'descanso';
   const C = 2 * Math.PI * 108;
-  d.innerHTML = `<div class="sub" style="font-size:18px">Descansa 😌 así la próxima serie sale más fuerte</div>
+  d.innerHTML = `<div class="sub" style="font-size:18px">Descansa: así la próxima serie sale más fuerte</div>
     <div class="reloj"><svg width="240" height="240"><circle cx="120" cy="120" r="108" stroke="var(--card2)" stroke-width="16" fill="none"/>
     <circle id="arco" cx="120" cy="120" r="108" stroke="var(--acc)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg><div class="num" id="seg">${mmss(seg)}</div></div>
     <div class="row"><button class="btn" data-a="saltar">Listo ▶</button></div>`;
@@ -690,7 +691,7 @@ document.addEventListener('click', ev => {
   switch (a) {
     case 'dias': {
       const n = Number(d.n); S.semanas[lunes(hoy())] = n; S.ultimaN = n; guardar(); cerrarHoja(); render();
-      toast('¡Listo! Semana de ' + n + ' días 💪'); break;
+      toast('¡Listo! Semana de ' + n + ' días '); break;
     }
     case 'cambiarDias': hojaDias(); break;
     case 'empezar': hojaEnergia(d.r); break;
@@ -727,7 +728,7 @@ document.addEventListener('click', ev => {
       if (s.ok) {
         vibrar(40);
         const quedan = it.sets.some(x => !x.ok);
-        if (EJ[it.ex].tipo === 'k') { if (i === act.items.length - 1) toast('¡Cardio listo! Toca "Terminar" 🎉'); }
+        if (EJ[it.ex].tipo === 'k') { if (i === act.items.length - 1) toast('¡Cardio listo! Toca "Terminar" '); }
         else if (quedan) descanso(segDescanso(it.ex, act.energia));
         else { toast('¡Ejercicio terminado! ✓'); if (i < act.items.length - 1) setTimeout(() => { descanso(segDescanso(it.ex, act.energia)); }, 300); }
       }

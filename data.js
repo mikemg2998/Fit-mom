@@ -601,27 +601,27 @@ EJ.prensa.img = 'Leg_Press';
    Tranquila = los 6 primeros · Normal = 7 · Con energía = 8          */
 const RUTINAS = {
   piernaA: {
-    nombre: 'Pierna y glúteo A', corto: 'Pierna A', emoji: '🍑', color: '#FFD60A', pierna: true,
+    nombre: 'Pierna y glúteo', corto: 'Pierna', pierna: true,
     desc: 'Cuádriceps, femoral y glúteo',
     ejercicios: ['hipThrust', 'prensa', 'extension', 'curlSentado', 'abductor', 'patada', 'pantorrillaSentada', 'aductor']
   },
   superiorA: {
-    nombre: 'Tren superior A', corto: 'Superior A', emoji: '💪', color: '#4CC9F0',
+    nombre: 'Espalda, pecho y brazo', corto: 'Brazo',
     desc: 'Espalda, pecho y brazos · tonificar',
     ejercicios: ['jalon', 'pressPecho', 'remoPolea', 'aperturas', 'triceps', 'biceps', 'laterales', 'pallof']
   },
   piernaB: {
-    nombre: 'Pierna y glúteo B', corto: 'Pierna B', emoji: '🦵', color: '#FF9F1C', pierna: true,
+    nombre: 'Glúteo y femoral', corto: 'Glúteo', pierna: true,
     desc: 'Glúteo y parte de atrás de la pierna',
     ejercicios: ['rumano', 'hipThrust', 'curlAcostado', 'prensa', 'abductor', 'hiperextension', 'extensionUna', 'pantorrillaPrensa']
   },
   superiorB: {
-    nombre: 'Tren superior B', corto: 'Superior B', emoji: '✨', color: '#B892FF',
+    nombre: 'Hombro, brazo y abdomen', corto: 'Hombro',
     desc: 'Hombros, espalda, brazos y abdomen',
     ejercicios: ['remoMaquina', 'pressHombro', 'jalonCerrado', 'posterior', 'fondos', 'martillo', 'crunchMaquina', 'deadBug']
   },
   gluteoTotal: {
-    nombre: 'Glúteo + cuerpo completo', corto: 'Glúteo + todo', emoji: '🔥', color: '#F72585', pierna: true,
+    nombre: 'Glúteo y cuerpo completo', corto: 'Completo', pierna: true,
     desc: 'Día extra: glúteo y un poquito de todo',
     ejercicios: ['hipThrust', 'abductor', 'jalon', 'pullThrough', 'pressPecho', 'patada', 'remoMaquina', 'pallof']
   }
@@ -638,11 +638,11 @@ const PLANES = {
 
 // Cómo cambia el día según la energía
 const ENERGIA = {
-  tranquila: { nombre: 'Tranquila', emoji: '🌿', n: 6, series: 2, rir: 3, cardio: 10, descanso: 60,
+  tranquila: { nombre: 'Tranquila', nivel: 1, n: 6, series: 2, rir: 3, cardio: 10, descanso: 60,
     frase: '6 ejercicios · 2 series · peso cómodo', guia: 'Termina cada serie sintiendo que podías hacer 3 más.' },
-  normal: { nombre: 'Normal', emoji: '🙂', n: 7, series: 3, rir: 2, cardio: 15, descanso: 75,
+  normal: { nombre: 'Normal', nivel: 2, n: 7, series: 3, rir: 2, cardio: 15, descanso: 75,
     frase: '7 ejercicios · 3 series', guia: 'Termina cada serie sintiendo que podías hacer 2 más.' },
-  fuerte: { nombre: 'Con energía', emoji: '⚡', n: 8, series: 3, rir: 1, cardio: 20, descanso: 90,
+  fuerte: { nombre: 'Con energía', nivel: 3, n: 8, series: 3, rir: 1, cardio: 20, descanso: 90,
     frase: '8 ejercicios · 3 series · un poquito más pesado', guia: 'Las últimas repeticiones deben costar: te debe sobrar solo 1.' }
 };
 
