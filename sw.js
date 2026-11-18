@@ -1,5 +1,5 @@
 /* Guarda todo en el celular para que funcione sin internet. Sube VERSION al cambiar archivos. */
-const VERSION = 'fitmommy-v4';
+const VERSION = 'fitmommy-v5';
 const ARCHIVOS = [
   './', 'index.html', 'styles.css', 'data.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',

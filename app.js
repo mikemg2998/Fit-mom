@@ -553,7 +553,7 @@ function vPorque() {
   <li><b>Cada músculo 2 veces por semana.</b> Entrenar fuerza 2 a 3 veces por semana es lo que más músculo da a cualquier edad. Por eso pierna y cola se repiten 2 días.</li>
   <li><b>Después de los 50 hay que levantar peso de verdad.</b> En la menopausia se pierde músculo y hueso más rápido. En mujeres posmenopáusicas, entrenar con pesos que cuestan (con buena técnica) es seguro y mejora músculo, fuerza y hueso.</li>
   <li><b>De 8 a 15 repeticiones, cerca del cansancio.</b> Con pesos moderados se gana tanto músculo como con pesos muy altos, si las últimas repeticiones cuestan. Es más amable con las articulaciones.</li>
-  <li><b>Descansar bien entre series.</b> Descansar 2 a 3 minutos en los ejercicios grandes (prensa, hip thrust, peso muerto rumano, jalón, remo, press) gana más músculo que descansar 1 minuto, porque la siguiente serie sale con más fuerza. En los ejercicios pequeños (abductor, bíceps, tríceps, pantorrilla) basta con 1 minuto y medio. La app ya pone el tiempo según el ejercicio.</li>
+  <li><b>Descansar bien entre series.</b> Descansar 2 a 3 minutos gana más músculo que descansar 1 minuto, porque la siguiente serie sale con más fuerza. Por eso la app pone 2 minutos y 45 segundos de descanso.</li>
   <li><b>Subir poquito a poquito.</b> Cuando logras el máximo de repeticiones en todas las series, la app te sube el peso. Así el cuerpo sigue mejorando.</li>
   <li><b>Brazos y espalda: tonificar, no agrandar.</b> "Tonificar" es tener músculo firme y menos grasa encima. Con 12 a 15 repeticiones y sin exagerar el volumen, los brazos no crecen. La grasa no se quema por zonas: baja en todo el cuerpo.</li>
   <li><b>La grasa se baja sobre todo en la cocina.</b> Comer un poquito menos de lo que gastas, proteína en cada comida (unos 80 a 100 g al día: huevos, pollo, pescado, lácteos, fríjoles, lentejas) y caminar más. El cardio suave al final del entrenamiento ayuda.</li>
@@ -645,14 +645,8 @@ function hojaEscribir(c, i, k) {
 
 /* ================= DESCANSO ================= */
 let reloj = null;
-// Descanso según el ejercicio: los grandes (pierna, glúteo, espalda, pecho) más largo.
-const GRANDES = ['prensa', 'prensaHorizontal', 'hipThrust', 'hipSmith', 'rumano', 'rumanoSmith', 'stepUp', 'jalon', 'jalonCerrado', 'remoPolea', 'remoMaquina', 'remoAlto', 'pressPecho', 'pressPechoPolea', 'pressHombro', 'pressHombroMancuerna', 'curlSentado', 'curlAcostado', 'extension'];
-function segDescanso(ex, energia) {
-  const grande = GRANDES.includes(ex);
-  if (energia === 'tranquila') return grande ? 120 : 90;
-  if (energia === 'fuerte') return grande ? 180 : 120;
-  return grande ? 150 : 90;
-}
+// Descanso fijo entre series: 2 min 45 s
+function segDescanso() { return 165; }
 function mmss(t) { return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
 function descanso(seg) {
   pararDescanso();
@@ -662,10 +656,9 @@ function descanso(seg) {
   d.innerHTML = `<div class="sub" style="font-size:18px">Descansa 😌 así la próxima serie sale más fuerte</div>
     <div class="reloj"><svg width="240" height="240"><circle cx="120" cy="120" r="108" stroke="var(--card2)" stroke-width="16" fill="none"/>
     <circle id="arco" cx="120" cy="120" r="108" stroke="var(--acc)" stroke-width="16" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg><div class="num" id="seg">${mmss(seg)}</div></div>
-    <div class="row"><button class="btn ghost" data-a="mas15">+30 s</button><button class="btn" data-a="saltar">Listo ▶</button></div>`;
+    <div class="row"><button class="btn" data-a="saltar">Listo ▶</button></div>`;
   document.body.appendChild(d);
-  let total = seg, finR = fin;
-  d._mas = () => { finR += 30000; total += 30; };
+  const total = seg, finR = fin;
   reloj = setInterval(() => {
     const r = Math.max(0, Math.ceil((finR - Date.now()) / 1000));
     const el = document.getElementById('seg'); if (!el) return pararDescanso();
@@ -750,7 +743,6 @@ document.addEventListener('click', ev => {
     case 'saltar': pararDescanso(); break;
     case 'historial': hojaHistorial(d.ex); break;
     case 'sesion': hojaSesion(d.id); break;
-    case 'mas15': { const el = document.getElementById('descanso'); el && el._mas(); break; }
     case 'tema': S.tema = d.t; guardar(); render(); break;
     case 'medida': hojaMedida(); break;
     case 'guardarMedida': {
