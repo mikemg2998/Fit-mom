@@ -1,5 +1,5 @@
 /* Guarda todo en el celular para que funcione sin internet. Sube VERSION al cambiar archivos. */
-const VERSION = 'fitmommy-v5';
+const VERSION = 'fitmommy-v6';
 const ARCHIVOS = [
   './', 'index.html', 'styles.css', 'data.js', 'app.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
@@ -114,21 +114,34 @@ const ARCHIVOS = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+  // cache: 'reload' evita copiar archivos viejos guardados por el navegador
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 const FUENTES = ['api.fontshare.com', 'cdn.fontshare.com'];
+function guardarCopia(req, res) {
+  if (res && (res.ok || res.type === 'opaque')) { const c = res.clone(); caches.open(VERSION).then(k => k.put(req, c)); }
+  return res;
+}
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  const url = new URL(e.request.url);
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
   const propio = url.origin === location.origin, fuente = FUENTES.includes(url.hostname);
   if (!propio && !fuente) return;
+  const esFoto = propio && (url.pathname.includes('/img/') || url.pathname.includes('/icons/'));
+  if (propio && !esFoto) {
+    // Código de la app: primero internet (siempre la última versión), y sin internet la copia guardada
+    e.respondWith(
+      fetch(req, { cache: 'no-cache' }).then(res => guardarCopia(req, res))
+        .catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match('index.html')))
+    );
+    return;
+  }
+  // Fotos y letra: primero la copia guardada
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: propio }).then(r => r || fetch(e.request).then(res => {
-      if (res.ok || res.type === 'opaque') { const copia = res.clone(); caches.open(VERSION).then(c => c.put(e.request, copia)); }
-      return res;
-    }).catch(() => e.request.mode === 'navigate' ? caches.match('index.html') : Response.error()))
+    caches.match(req, { ignoreSearch: propio }).then(r => r || fetch(req).then(res => guardarCopia(req, res)).catch(() => Response.error()))
   );
 });

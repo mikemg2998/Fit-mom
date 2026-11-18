@@ -798,11 +798,16 @@ function importar(ev) {
 /* ================= PWA ================= */
 let deferido = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferido = e; });
-if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
-// Cuando hay una versión nueva de la app, recarga sola (solo si no está en medio de un entrenamiento)
-if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
+// Cuando hay una versión nueva de la app, recarga sola (todo queda guardado, no se pierde nada)
+if ('serviceWorker' in navigator) {
+  const habia = !!navigator.serviceWorker.controller;
   let recargado = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => { if (!recargado && !S.actual) { recargado = true; location.reload(); } });
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (habia && !recargado) { recargado = true; location.reload(); } });
+  // Al volver a abrir la app, revisa si hay versión nueva
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') navigator.serviceWorker.getRegistration().then(r => r && r.update()).catch(() => {});
+  });
 }
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
 
